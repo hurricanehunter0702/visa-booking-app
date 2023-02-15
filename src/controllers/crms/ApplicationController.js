@@ -288,82 +288,82 @@ const create = async (req, res) => {
                         pdf: pdfFileName,
                         note: person.note
                     });
-                    let attachment = fs.readFileSync(`uploads/pdfs/${pdfFileName}`).toString("base64");
-                    await sgMail.send({
-                        to: person.email,
-                        from: process.env.SENDGRID_USER,
-                        subject: "Your Application has been submitted successfully.",
-                        html: `
-                            <div style="padding-top: 30px; padding-bottom: 30px;">
-                                <div style="overflow: auto; padding: 10px 50px; background:rgba(223, 231, 233, 0.1)">
-                                    <div style="float:left; width: 60%; overflow: auto;">
-                                        <div style="float: left;">
-                                            <h3 style="margin: 0px;">Submitted Visa Application Form</h3>
-                                            <h4 style="margin-top: 20px; margin-bottom: 0px;">Date: ${moment().format("MM/DD/YYYY")}</h4>
-                                            <h4 style="margin-top: 5px; margin-bottom: 5px;">Application ID: ${application._id}</h4>
-                                        </div> 
-                                        <div style="float: right; text-align: right;">
-                                            <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="max-width: 250px; height: auto;"/>
-                                        </div>
-                                    </div>
-                                    <div style="float:right; width: 40%; text-align: right;"><img src="${req.protocol}://${req.headers.host}/uploads/map.png" style="height: 120px;"/></div>
-                                </div>
-                                <div style="padding: 20px 50px;">
-                                    <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been submitted successfully.</h3>
-                                    <p>
-                                        Please find attached the application form or <br/>download your application through the following button
-                                    </p>
-                                    <div style="margin-top: 50px; text-align: center">
-                                        <a download href="${req.protocol}://${req.headers.host}/uploads/pdfs/${person.pdf}" style="background:#28A820; text-decoration: none; display: inline-block; font-weight: bold; border-radius: 8px; padding: 25px 50px; color: #fafafa; line-height: 0px; font-size: 18px; border: none ">Download</a>
-                                    </div>
-                                </div>
-                                <div style="margin-top: 20px;">
-                                    <div style="background: #175593; padding: 10px 40px; font-size: 20px; color: #fafafa">Please allow 10 days before tracking the progress of your application.</div>
-                                    <div style="padding: 20px 40px;">
-                                        <ul style="font-size: 20px; list-style: circle; font-weight: bold; line-height: 2.0;">
-                                            <li>You will be automatically notified with status of your application through email.</li>
-                                            <li>You can track your application using the Application ID provided in this email.</li>
-                                            <li>You can also track your application using the QR Code and Barcode provided in PDF file.</li>
-                                        </ul>
-                                        <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
-                                    </div>
-                                </div>
-                                <div style="overflow: auto;">
-                                    <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="float: left; max-width: 250px; height: auto; margin-right: 150px"/>
-                                </div>
-                            </div>
-                        `,
-                        attachments: [{
-                            content: attachment,
-                            type: "application/pdf",
-                            filename: "application.pdf",
-                            disposition: "attachment"
-                        }]
-                    });
-                    if (person.country === "UK") {
-                        // SEND SMS
-                        try {
-                            await twilio.messages.create({
-                                body: `
-                                    Your Visa Application ${application._id} has been submitted successfully, You wil receive an email shortly with details of your application, please allow 10 days before tracking your application.
-                                    Visa Application Form following url. ${req.protocol}://${req.hostname}/uploads/pdfs/${pdfFileName}
-                                `,
-                                from: `+${process.env.TWILIO_PHONE}`,
-                                to: person.phone
-                            });
-                        } catch (err) {
-                            console.log(err.message);
-                        }
-                        // SEND WHATSAPP
-                        // result = await twilio.messages.create({
-                        //     body: `
-                        //         Your Visa Application ${application._id} has been submitted successfully, You wil receive an email shortly with details of your application, please allow 10 days before tracking your application.
-                        //         Visa Application Form / http://localhost:5000
-                        //     `,
-                        //     from: `whatsapp:+447380520373`,
-                        //     to: `whatsapp:+447470174216`
-                        // });
-                    }
+                    // let attachment = fs.readFileSync(`uploads/pdfs/${pdfFileName}`).toString("base64");
+                    // await sgMail.send({
+                    //     to: person.email,
+                    //     from: process.env.SENDGRID_USER,
+                    //     subject: "Your Application has been submitted successfully.",
+                    //     html: `
+                    //         <div style="padding-top: 30px; padding-bottom: 30px;">
+                    //             <div style="overflow: auto; padding: 10px 50px; background:rgba(223, 231, 233, 0.1)">
+                    //                 <div style="float:left; width: 60%; overflow: auto;">
+                    //                     <div style="float: left;">
+                    //                         <h3 style="margin: 0px;">Submitted Visa Application Form</h3>
+                    //                         <h4 style="margin-top: 20px; margin-bottom: 0px;">Date: ${moment().format("MM/DD/YYYY")}</h4>
+                    //                         <h4 style="margin-top: 5px; margin-bottom: 5px;">Application ID: ${application._id}</h4>
+                    //                     </div> 
+                    //                     <div style="float: right; text-align: right;">
+                    //                         <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="max-width: 250px; height: auto;"/>
+                    //                     </div>
+                    //                 </div>
+                    //                 <div style="float:right; width: 40%; text-align: right;"><img src="${req.protocol}://${req.headers.host}/uploads/map.png" style="height: 120px;"/></div>
+                    //             </div>
+                    //             <div style="padding: 20px 50px;">
+                    //                 <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been submitted successfully.</h3>
+                    //                 <p>
+                    //                     Please find attached the application form or <br/>download your application through the following button
+                    //                 </p>
+                    //                 <div style="margin-top: 50px; text-align: center">
+                    //                     <a download href="${req.protocol}://${req.headers.host}/uploads/pdfs/${person.pdf}" style="background:#28A820; text-decoration: none; display: inline-block; font-weight: bold; border-radius: 8px; padding: 25px 50px; color: #fafafa; line-height: 0px; font-size: 18px; border: none ">Download</a>
+                    //                 </div>
+                    //             </div>
+                    //             <div style="margin-top: 20px;">
+                    //                 <div style="background: #175593; padding: 10px 40px; font-size: 20px; color: #fafafa">Please allow 10 days before tracking the progress of your application.</div>
+                    //                 <div style="padding: 20px 40px;">
+                    //                     <ul style="font-size: 20px; list-style: circle; font-weight: bold; line-height: 2.0;">
+                    //                         <li>You will be automatically notified with status of your application through email.</li>
+                    //                         <li>You can track your application using the Application ID provided in this email.</li>
+                    //                         <li>You can also track your application using the QR Code and Barcode provided in PDF file.</li>
+                    //                     </ul>
+                    //                     <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
+                    //                 </div>
+                    //             </div>
+                    //             <div style="overflow: auto;">
+                    //                 <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="float: left; max-width: 250px; height: auto; margin-right: 150px"/>
+                    //             </div>
+                    //         </div>
+                    //     `,
+                    //     attachments: [{
+                    //         content: attachment,
+                    //         type: "application/pdf",
+                    //         filename: "application.pdf",
+                    //         disposition: "attachment"
+                    //     }]
+                    // });
+                    // if (person.country === "UK") {
+                    //     // SEND SMS
+                    //     try {
+                    //         await twilio.messages.create({
+                    //             body: `
+                    //                 Your Visa Application ${application._id} has been submitted successfully, You wil receive an email shortly with details of your application, please allow 10 days before tracking your application.
+                    //                 Visa Application Form following url. ${req.protocol}://${req.hostname}/uploads/pdfs/${pdfFileName}
+                    //             `,
+                    //             from: `+${process.env.TWILIO_PHONE}`,
+                    //             to: person.phone
+                    //         });
+                    //     } catch (err) {
+                    //         console.log(err.message);
+                    //     }
+                    //     // SEND WHATSAPP
+                    //     // result = await twilio.messages.create({
+                    //     //     body: `
+                    //     //         Your Visa Application ${application._id} has been submitted successfully, You wil receive an email shortly with details of your application, please allow 10 days before tracking your application.
+                    //     //         Visa Application Form / http://localhost:5000
+                    //     //     `,
+                    //     //     from: `whatsapp:+447380520373`,
+                    //     //     to: `whatsapp:+447470174216`
+                    //     // });
+                    // }
                 }
                 await Application.findByIdAndUpdate(application._id, {persons: persons});
                 return res.json({
@@ -468,73 +468,73 @@ const update = async (req, res) => {
                 filename: "application.pdf",
                 disposition: "attachment"
             }];
-            if (req.file) {
-                attachments.push({
-                    content: fs.readFileSync(`uploads/attachments/${req.file.filename}`).toString('base64'),
-                    type: req.file.mimetype,
-                    filename: req.file.filename,
-                    disposition: "attachment"
-                });
-            }
-            await sgMail.send({
-                to: person.email,
-                from: process.env.SENDGRID_USER,
-                subject: data.status == "approved" ? "Your Application has been approved." : "Your Application has been decliend.",
-                html: `
-                    <div style="padding-top: 30px; padding-bottom: 30px;">
-                        <div style="overflow: auto; padding: 10px 50px; background:rgba(223, 231, 233, 0.1)">
-                            <div style="float:left; width: 60%; overflow: auto;">
-                                <div style="float: left;">
-                                    <h3 style="margin: 0px;">Submitted Visa Application Form</h3>
-                                    <h4 style="margin-top: 20px; margin-bottom: 0px;">Date: ${moment().format("MM/DD/YYYY")}</h4>
-                                    <h4 style="margin-top: 5px; margin-bottom: 5px;">Application ID: ${application._id}</h4>
-                                </div> 
-                                <div style="float: right; text-align: right;">
-                                <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="max-width: 250px; height: auto;"/>
-                                </div>
-                            </div>
-                            <div style="float:right; width: 40%; text-align: right;"><img src="https://instructorsdash.com/images/map.png" style="height: 120px;"/></div>
-                        </div>
-                        ${
-                            data.status === "approved" ? `
-                            <div style="padding: 20px 50px;">
-                                <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been <span style="color: #28A820">approved</span>.</h3>
-                                <p>Please find attached the application form or <br/>download your application through the following button</p>
-                                <div style="margin-top: 50px; text-align: center">
-                                <a download href="${req.protocol}://${req.headers.host}/uploads/pdfs/${person.pdf}" style="background:#28A820; text-decoration: none; display: inline-block; font-weight: bold; border-radius: 8px; padding: 25px 50px; color: #fafafa; line-height: 0px; font-size: 18px; border: none ">Download</a>
-                                </div>
-                            </div>
-                            <div style="margin-top: 20px;">
-                                <div style="background: #DE3413; padding: 10px 40px; font-size: 20px; color: #fafafa">Applicants must bring the following documents when visiting the Iranian Consular Section</div>
-                                <div style="padding: 20px 40px;">
-                                    <ul style="font-size: 20px; list-style: circle; font-weight: bold; line-height: 2.0;">
-                                        <li>2X Recent Biometric photo</li>
-                                        <li>A valid passport for a period of 6 months minimum</li>
-                                        <li>Supporting Documents ( Original )</li>
-                                    </ul>
-                                    <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
-                                </div>
-                            </div>` : `
-                            <div style="padding: 20px 50px">
-                                <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been <span style="color: #F10808">declined</span>.</h3>
-                                <h3 style="color: #175593">Why my Visa application was declined?</h3>
-                                <div>${data.note}</div>
-                            </div>
-                            <div style="margin-top: 20px;">
-                                <div style="background: #DE3413; padding: 10px 40px; font-size: 20px; color: #fafafa">Please allow 24 days before reApplying for a new Visa Application Form.</div>
-                                <div style="padding: 20px 40px;">
-                                <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
-                                </div>
-                            </div>
-                            `
-                        }
-                        <div style="overflow: auto;">
-                            <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="float: left; max-width: 250px; height: auto; margin-right: 15px;"/>
-                        </div>
-                    </div>
-                `,
-                attachments: attachments
-            })
+            // if (req.file) {
+            //     attachments.push({
+            //         content: fs.readFileSync(`uploads/attachments/${req.file.filename}`).toString('base64'),
+            //         type: req.file.mimetype,
+            //         filename: req.file.filename,
+            //         disposition: "attachment"
+            //     });
+            // }
+            // await sgMail.send({
+            //     to: person.email,
+            //     from: process.env.SENDGRID_USER,
+            //     subject: data.status == "approved" ? "Your Application has been approved." : "Your Application has been decliend.",
+            //     html: `
+            //         <div style="padding-top: 30px; padding-bottom: 30px;">
+            //             <div style="overflow: auto; padding: 10px 50px; background:rgba(223, 231, 233, 0.1)">
+            //                 <div style="float:left; width: 60%; overflow: auto;">
+            //                     <div style="float: left;">
+            //                         <h3 style="margin: 0px;">Submitted Visa Application Form</h3>
+            //                         <h4 style="margin-top: 20px; margin-bottom: 0px;">Date: ${moment().format("MM/DD/YYYY")}</h4>
+            //                         <h4 style="margin-top: 5px; margin-bottom: 5px;">Application ID: ${application._id}</h4>
+            //                     </div> 
+            //                     <div style="float: right; text-align: right;">
+            //                     <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="max-width: 250px; height: auto;"/>
+            //                     </div>
+            //                 </div>
+            //                 <div style="float:right; width: 40%; text-align: right;"><img src="https://instructorsdash.com/images/map.png" style="height: 120px;"/></div>
+            //             </div>
+            //             ${
+            //                 data.status === "approved" ? `
+            //                 <div style="padding: 20px 50px;">
+            //                     <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been <span style="color: #28A820">approved</span>.</h3>
+            //                     <p>Please find attached the application form or <br/>download your application through the following button</p>
+            //                     <div style="margin-top: 50px; text-align: center">
+            //                     <a download href="${req.protocol}://${req.headers.host}/uploads/pdfs/${person.pdf}" style="background:#28A820; text-decoration: none; display: inline-block; font-weight: bold; border-radius: 8px; padding: 25px 50px; color: #fafafa; line-height: 0px; font-size: 18px; border: none ">Download</a>
+            //                     </div>
+            //                 </div>
+            //                 <div style="margin-top: 20px;">
+            //                     <div style="background: #DE3413; padding: 10px 40px; font-size: 20px; color: #fafafa">Applicants must bring the following documents when visiting the Iranian Consular Section</div>
+            //                     <div style="padding: 20px 40px;">
+            //                         <ul style="font-size: 20px; list-style: circle; font-weight: bold; line-height: 2.0;">
+            //                             <li>2X Recent Biometric photo</li>
+            //                             <li>A valid passport for a period of 6 months minimum</li>
+            //                             <li>Supporting Documents ( Original )</li>
+            //                         </ul>
+            //                         <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
+            //                     </div>
+            //                 </div>` : `
+            //                 <div style="padding: 20px 50px">
+            //                     <h3>Your Application <span style="background-color: #175593; color: #fafafa; display: inline-block; padding: 1px 3px;">${application._id}</span> has been <span style="color: #F10808">declined</span>.</h3>
+            //                     <h3 style="color: #175593">Why my Visa application was declined?</h3>
+            //                     <div>${data.note}</div>
+            //                 </div>
+            //                 <div style="margin-top: 20px;">
+            //                     <div style="background: #DE3413; padding: 10px 40px; font-size: 20px; color: #fafafa">Please allow 24 days before reApplying for a new Visa Application Form.</div>
+            //                     <div style="padding: 20px 40px;">
+            //                     <h4 style="font-size: 20px; margin-top: 50px; padding-left: 40px;">Thank you for using our service</h4>
+            //                     </div>
+            //                 </div>
+            //                 `
+            //             }
+            //             <div style="overflow: auto;">
+            //                 <img src="${req.protocol}://${req.headers.host}/uploads/logos/${logo.image}" style="float: left; max-width: 250px; height: auto; margin-right: 15px;"/>
+            //             </div>
+            //         </div>
+            //     `,
+            //     attachments: attachments
+            // })
         }
         res.json({
             status: true,

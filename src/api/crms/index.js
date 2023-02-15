@@ -15,6 +15,7 @@ const categoriesApi = require("./categories");
 const invoicesApi = require("./invoices");
 const transactionsApi = require("./transactions");
 const reportsApi = require("./reports");
+const contactsApi = require("./contacts");
 
 const router = express.Router();
 
@@ -33,5 +34,6 @@ router.use("/categories", categoriesApi);
 router.use("/invoices", invoicesApi);
 router.use("/transactions", transactionsApi);
 router.use("/reports", reportsApi);
+router.use("/contacts", contactsApi);
 
 module.exports = router;
